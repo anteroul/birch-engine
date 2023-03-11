@@ -1,25 +1,39 @@
+#pragma once
+
 #ifndef BIRCHENGINE_ENGINE_H
 #define BIRCHENGINE_ENGINE_H
 
-#include <GLFW/glfw3.h>
-#include <cmath>
-#include <cstdio>
-#include "Object.h"
+#include "Shader.h"
+#include "Window.h"
+#include "Camera.h"
+#include "Scene.h"
 
 class Engine {
 public:
     Engine(int w, int h);
-    ~Engine();
+    bool running;
 private:
-    enum behavior { MOVE_VERTICAL, MOVE_HORIZONTAL, ROTATE };
-    //[[maybe_unused]] int keysArePressed[512];
-    float movingSpeed = 0.0016f;
-    long long degree = 0;
-    Object firstObject = {255.f, 0, 0, -0.5f, 0.5f, 0.09f, false};
-    Object secondObject = {255.f,255.f, 0,-0.25f, -0.25f, 0.12f, false};
-    Object thirdObject = {255.f, 0, 255.f, 0.5f, -0.5f, 0.04f, false};
+    Window window;
+    Camera camera;
+    Scene scene;
+    SDL_Event e;
+    // is camera moving
+    bool isMoving = false;
+    // variables for updating time
+    const int FPS = 1000 / 60; // 60 FPS
+    int lastTime = SDL_GetTicks();
+    int currentTime;
+    int elapsedTime;
 
-    void UpdateObject(Object &object, behavior b);
+    // copies of camera values
+    glm::vec3 cameraPosition;
+    glm::vec3 cameraFrontVector;
+
+    void update();
+    void render();
+    void trackInput();
+    void updateCamera();
+    void updateTime();
 };
 
 #endif //BIRCHENGINE_ENGINE_H
