@@ -52,22 +52,6 @@ void Engine::trackInput()
                 running = false;
                 break;
             case SDL_KEYDOWN:
-                if (state[SDL_SCANCODE_W]) {
-                    cameraPosition += camera.getSpeed() * cameraFrontVector;
-                    viewChanged = true;
-                }
-                if (state[SDL_SCANCODE_S]) {
-                    cameraPosition -= camera.getSpeed() * cameraFrontVector;
-                    viewChanged = true;
-                }
-                if (state[SDL_SCANCODE_A]) {
-                    cameraPosition -= glm::normalize(glm::cross(cameraFrontVector, camera.getUp())) * camera.getSpeed();
-                    viewChanged = true;
-                }
-                if (state[SDL_SCANCODE_D]) {
-                    cameraPosition += glm::normalize(glm::cross(cameraFrontVector, camera.getUp())) * camera.getSpeed();
-                    viewChanged = true;
-                }
                 if (e.key.keysym.sym == SDLK_ESCAPE) {
                     running = false;
                     break;
@@ -83,6 +67,23 @@ void Engine::trackInput()
                 break;
             default:
                 break;
+        }
+
+        if (state[SDL_SCANCODE_W]) {
+            cameraPosition += camera.getSpeed() * cameraFrontVector;
+            viewChanged = true;
+        }
+        if (state[SDL_SCANCODE_S]) {
+            cameraPosition -= camera.getSpeed() * cameraFrontVector;
+            viewChanged = true;
+        }
+        if (state[SDL_SCANCODE_A]) {
+            cameraPosition -= glm::normalize(glm::cross(cameraFrontVector, camera.getUp())) * camera.getSpeed();
+            viewChanged = true;
+        }
+        if (state[SDL_SCANCODE_D]) {
+            cameraPosition += glm::normalize(glm::cross(cameraFrontVector, camera.getUp())) * camera.getSpeed();
+            viewChanged = true;
         }
     }
 }

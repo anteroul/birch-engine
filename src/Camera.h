@@ -5,7 +5,7 @@
 // Default camera values
 #define YAW (-90.0f)
 #define PITCH 10.0f
-#define SPEED 0.01f
+#define SPEED 0.001f
 #define SENSITIVITY 0.18f
 
 class Camera {
