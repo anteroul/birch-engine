@@ -49,4 +49,5 @@ Window::~Window()
         SDL_DestroyWindow(window);
 
     SDL_Quit();
+    printf("Application closed successfully.\n");
 }

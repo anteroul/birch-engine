@@ -2,23 +2,40 @@
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 
+#define FPS 75
 
 Engine::Engine(int w, int h) :
         running(true), window(w, h),
         camera(),
         scene(camera),
         cameraPosition(glm::vec3(0.0f)) {
-    glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
-    glEnable(GL_DEPTH_TEST);
+    printf("FPS capped at %d.\n", FPS);
 }
 
 void Engine::RunApplication()
 {
+    const int frameDelay = 1000 / FPS;
+    Uint32 frameStart;
+    unsigned int frameTime;
+
+    glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
+    glEnable(GL_DEPTH_TEST);
+
+    // Game loop:
     while(running)
     {
+        frameStart = SDL_GetTicks();
+
         render();
         trackInput();
         updateCamera();
+
+        frameTime = SDL_GetTicks() - frameStart;
+
+        if (frameDelay > frameTime)
+            SDL_Delay(frameDelay - frameTime);
+
+        //printf("FPS: %d\n", frameTime);
     }
 }
 
@@ -27,6 +44,7 @@ bool Engine::ApplicationShouldClose() const
     if (running)
         return false;
 
+    printf("Closing application...\n");
     return true;
 }
 
