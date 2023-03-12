@@ -1,21 +1,24 @@
 #include "Window.h"
 #include <GL/glew.h>
-#include <iostream>
+#include <cstdio>
 
-Window::Window(int width, int height) {
+Window::Window(int width, int height)
+{
     // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cout << "ERROR: Could not initialize SDL!" << std::endl;
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+        printf("ERROR: Could not initialize SDL!\n");
         return;
     }
 
     printf("Window Resolution: %d x %d \n", width, height);
 
     // Create the window
-    window = SDL_CreateWindow("Birch Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height,
-                              SDL_WINDOW_OPENGL);
-    if (!window) {
-        std::cerr << "ERROR: " << SDL_GetError() << std::endl;
+    window = SDL_CreateWindow("Birch Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height,SDL_WINDOW_OPENGL);
+
+    if (!window)
+    {
+        printf("ERROR: %s\n", SDL_GetError());
         return;
     }
 
@@ -24,7 +27,7 @@ Window::Window(int width, int height) {
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     // create ctx
-    ctx = SDL_GL_CreateContext(window);
+    SDL_GL_CreateContext(window);
 
     // start glew
     glewInit();
@@ -40,15 +43,10 @@ Window::Window(int width, int height) {
     SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
-Window::~Window() {
+Window::~Window()
+{
     if(window)
         SDL_DestroyWindow(window);
 
     SDL_Quit();
-}
-
-Vec2i Window::swapSize(Vec2i newSize) {
-    Vec2i oldSize = size;
-    size = newSize;
-    return oldSize;
 }

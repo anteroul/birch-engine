@@ -8,89 +8,87 @@ Engine::Engine(int w, int h) :
         camera(),
         scene(camera),
         cameraPosition(glm::vec3(0.0f)) {
-
-    // give a nice background
     glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
-
-    // enable depth testing
     glEnable(GL_DEPTH_TEST);
+}
 
+void Engine::RunApplication()
+{
     while(running)
-        update();
+    {
+        render();
+        trackInput();
+        updateCamera();
+    }
 }
 
-void Engine::update() {
-    updateTime();
-    render();
-    trackInput();
-    updateCamera();
+bool Engine::ApplicationShouldClose() const
+{
+    if (running)
+        return false;
+
+    return true;
 }
 
-void Engine::render() {
+void Engine::render()
+{
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     scene.update();
     // main SDL rendering
     SDL_GL_SwapWindow(window.window);
 }
 
-void Engine::trackInput() {
-    while (SDL_PollEvent(&e)) {
-        if (e.type == SDL_QUIT)
-            running = false;
+void Engine::trackInput()
+{
+    const Uint8 *state = SDL_GetKeyboardState(nullptr);
+    SDL_Event e;
 
-            // movement with WASD keys
-        else if (e.type == SDL_KEYDOWN) {
-            cameraFrontVector = camera.getNewFrontVector();
+    while (SDL_PollEvent(&e))
+    {
+        cameraFrontVector = camera.getNewFrontVector();
 
-            switch (e.key.keysym.sym) {
-                case SDLK_ESCAPE:
+        switch (e.type) {
+            case SDL_QUIT:
+                running = false;
+                break;
+            case SDL_KEYDOWN:
+                if (state[SDL_SCANCODE_W]) {
+                    cameraPosition += camera.getSpeed() * cameraFrontVector;
+                    viewChanged = true;
+                }
+                if (state[SDL_SCANCODE_S]) {
+                    cameraPosition -= camera.getSpeed() * cameraFrontVector;
+                    viewChanged = true;
+                }
+                if (state[SDL_SCANCODE_A]) {
+                    cameraPosition -= glm::normalize(glm::cross(cameraFrontVector, camera.getUp())) * camera.getSpeed();
+                    viewChanged = true;
+                }
+                if (state[SDL_SCANCODE_D]) {
+                    cameraPosition += glm::normalize(glm::cross(cameraFrontVector, camera.getUp())) * camera.getSpeed();
+                    viewChanged = true;
+                }
+                if (e.key.keysym.sym == SDLK_ESCAPE) {
                     running = false;
                     break;
-
-                case SDLK_w:
-                    cameraPosition += camera.getSpeed() + cameraFrontVector;
-                    isMoving = true;
-                    break;
-                case SDLK_s:
-                    cameraPosition -= camera.getSpeed() + cameraFrontVector;
-                    isMoving = true;
-                    break;
-                case SDLK_a:
-                    cameraPosition -= glm::normalize(glm::cross(cameraFrontVector, camera.getUp())) + camera.getSpeed();
-                    isMoving = true;
-                    break;
-                case SDLK_d:
-                    cameraPosition += glm::normalize(glm::cross(cameraFrontVector, camera.getUp())) + camera.getSpeed();
-                    isMoving = true;
-                    break;
-            }
-        }
-
-            // stop movement
-        else if (e.type == SDL_KEYUP) {
-            isMoving = false;
-            cameraPosition = glm::vec3(0.0f);
-        }
-
-            // move camera according to mouse
-        else if (e.type == SDL_MOUSEMOTION) {
-            camera.processMouseMovement(e.motion.xrel, e.motion.yrel);
+                }
+                break;
+            case SDL_MOUSEMOTION:
+                camera.processMouseMovement(e.motion.xrel, e.motion.yrel);
+                viewChanged = true;
+                break;
+            case SDL_KEYUP:
+                viewChanged = false;
+                cameraPosition = glm::vec3(0.0f);
+                break;
+            default:
+                break;
         }
     }
 }
 
-void Engine::updateCamera() {
-    if (isMoving)
+void Engine::updateCamera()
+{
+    if (viewChanged)
         camera.translate(cameraPosition, cameraFrontVector);
-}
-
-void Engine::updateTime() {
-    currentTime = SDL_GetTicks();
-    elapsedTime = currentTime - lastTime;
-    lastTime = currentTime;
-
-    // sleep for the remaining FPS
-    int elapsedTimeMs = SDL_GetTicks() - currentTime;
-    if (elapsedTimeMs < FPS)
-        SDL_Delay(FPS - elapsedTimeMs);
 }
