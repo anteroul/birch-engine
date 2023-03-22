@@ -96,6 +96,12 @@ void Engine::trackInput()
                     running = false;
                     break;
                 }
+                if (e.key.keysym.sym == SDLK_F1)
+                    activeScene = &day;
+                if (e.key.keysym.sym == SDLK_F2)
+                    activeScene = &night;
+                if (e.key.keysym.sym == SDLK_F3)
+                    activeScene = &evening;
                 break;
             case SDL_MOUSEMOTION:
                 camera.processMouseMovement(e.motion.xrel, e.motion.yrel);
