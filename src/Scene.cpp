@@ -1,10 +1,14 @@
 #include "Scene.h"
 
-Scene::Scene(Camera& camera) : camera(camera),
-	floor("../resources/sand.png")
+Scene::Scene(Camera& camera) :
+    camera(camera),
+	floor("../resources/sand.png"),
+    bunny("../resources/bunny.png", "../resources/bunny.obj"),
+    cactus("../resources/cactus.png", "../resources/cactus.obj"),
+    cube("../resources/pattern.png")
 {
 	floor.translate(glm::vec3(0.0f, -1.0f, 0.0f));
-	floor.scale(glm::vec3(20.0f, 0.1f, 20.0f));
+	floor.scale(glm::vec3(15.0f, 0.1f, 15.0f));
 
 	for(int i = 0; i < 7; i++)
 		brick.emplace_back(std::make_unique<Cube>("../resources/brick.png"));
@@ -16,11 +20,23 @@ Scene::Scene(Camera& camera) : camera(camera),
     brick[4]->translate(glm::vec3(4.0f, 0.0f, -1.0f));
     brick[5]->translate(glm::vec3(-4.0f, 0.0f, -3.0f));
     brick[6]->translate(glm::vec3(4.0f, 0.0f, 8.0f));
+
+    bunny.translate(glm::vec3(0.0f, -1.0f, -10.0f));
+
+    cactus.translate(glm::vec3(-8.0f, -1.0f, 10.0f));
+    cactus.scale(glm::vec3(0.1f, 0.1f, 0.1f));
+
+    cube.translate(glm::vec3(9.5f, 2.5f, 10.5f));
 }
 
 void Scene::update()
 {
 	floor.render(camera);
+    bunny.render(camera);
+    cactus.render(camera);
+    cube.render(camera);
+
+    cube.rotate(0.069f, glm::vec3(1.0f, 0.0f, 1.0f));
 
 	for(auto& s : brick)
 		s->render(camera);

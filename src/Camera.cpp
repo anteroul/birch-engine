@@ -41,7 +41,7 @@ void Camera::updateCameraVectors(const glm::vec3 &frontVector) {
     view = glm::lookAt(position, position + frontVector, up);
 }
 
-glm::vec3 Camera::getNewFrontVector() {
+glm::vec3 Camera::getNewFrontVector() const {
     // calculate the new Front vector
     glm::vec3 front;
     front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));

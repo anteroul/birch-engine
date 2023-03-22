@@ -21,7 +21,7 @@ public:
     const glm::vec3 &getPosition() const { return position; }
 
     // calculate new front vector
-    glm::vec3 getNewFrontVector();
+    glm::vec3 getNewFrontVector() const;
 
     // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
     void processMouseMovement(float x_offset, float y_offset, bool constrainPitch = true);
