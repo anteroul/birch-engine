@@ -4,8 +4,8 @@
 
 struct Texture
 {
-	Texture(const std::string& path);
-	Texture(){}
+	explicit Texture(const std::string& path);
+	Texture() = default;
 	std::string path;
-	unsigned int texture;
+	unsigned int texture{};
 };

@@ -3,7 +3,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../lib/stb_image.h"
 
-Texture::Texture(const std::string &path) : path(path) {
+Texture::Texture(const std::string &path) : path(path)
+{
     // Generate texture object
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -19,7 +20,8 @@ Texture::Texture(const std::string &path) : path(path) {
     stbi_set_flip_vertically_on_load(true);
     unsigned char *data = stbi_load(path.c_str(), &width, &height, &numComponents, 0);
 
-    if (data) {
+    if (data)
+    {
         // Upload image data to texture
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     } else {

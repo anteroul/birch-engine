@@ -4,7 +4,8 @@
 #include <sstream>
 
 
-Shader::Shader(const char *vertexPath, const char *fragmentPath) {
+Shader::Shader(const char *vertexPath, const char *fragmentPath)
+{
     // retrieve the vertex/fragment source code from filePath
     std::ifstream vShaderFile;
     std::ifstream fShaderFile;
@@ -29,8 +30,7 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
         // convert stream into string
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
-    }
-    catch (std::ifstream::failure e) {
+    } catch (std::ifstream::failure e) {
         printf("ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\n");
     }
 
@@ -63,21 +63,27 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
     glDeleteShader(fragment);
 }
 
-Shader::~Shader() {
+Shader::~Shader()
+{
     glDeleteProgram(ID);
 }
 
-void Shader::checkCompileErrors(unsigned int shader, std::string type) {
+void Shader::checkCompileErrors(unsigned int shader, const std::string& type)
+{
     int success;
     char infoLog[1024];
-    if (type != "PROGRAM") {
+
+    if (type != "PROGRAM")
+    {
         glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-        if (!success) {
+        if (!success)
+        {
             glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
             printf("ERROR::SHADER::COMPILATION_ERROR of type: %s\n", infoLog);
         } else {
             glGetProgramiv(shader, GL_LINK_STATUS, &success);
-            if (!success) {
+            if (!success)
+            {
                 glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
                 printf("ERROR::PROGRAM_LINKING_ERROR of type: %s\n", infoLog);
             }

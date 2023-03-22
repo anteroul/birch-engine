@@ -15,13 +15,15 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
     updateCameraVectors(getNewFrontVector());
 }
 
-void Camera::translate(const glm::vec3 &position, const glm::vec3 &frontVector) {
+void Camera::translate(const glm::vec3 &position, const glm::vec3 &frontVector)
+{
     this->position += position;
     updateCameraVectors(frontVector);
     view = glm::translate(view, position);
 }
 
-void Camera::processMouseMovement(float x_offset, float y_offset, bool constrainPitch) {
+void Camera::processMouseMovement(float x_offset, float y_offset, bool constrainPitch)
+{
     x_offset *= mouseSensitivity;
     y_offset *= mouseSensitivity;
 
@@ -32,7 +34,8 @@ void Camera::processMouseMovement(float x_offset, float y_offset, bool constrain
     updateCameraVectors(getNewFrontVector());
 }
 
-void Camera::updateCameraVectors(const glm::vec3 &frontVector) {
+void Camera::updateCameraVectors(const glm::vec3 &frontVector)
+{
     // re-calculate the Right and Up vector
     right = glm::normalize(glm::cross(frontVector, worldUp));
     up = glm::normalize(glm::cross(right, frontVector));
@@ -41,7 +44,8 @@ void Camera::updateCameraVectors(const glm::vec3 &frontVector) {
     view = glm::lookAt(position, position + frontVector, up);
 }
 
-glm::vec3 Camera::getNewFrontVector() const {
+glm::vec3 Camera::getNewFrontVector() const
+{
     // calculate the new Front vector
     glm::vec3 front;
     front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));

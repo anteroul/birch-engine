@@ -10,7 +10,7 @@
 
 class Engine {
 public:
-    Engine(int w, int h);
+    Engine(int w, int h, int sceneID);
     void RunApplication();
     bool ApplicationShouldClose() const;
 private:
@@ -20,7 +20,10 @@ private:
     bool running;
     Window window;
     Camera camera;
-    Scene scene;
+    Scene day;
+    Scene night;
+    Scene evening;
+    Scene *activeScene;
     glm::vec3 cameraPosition;
     glm::vec3 cameraFrontVector{};
     bool viewChanged = false;
