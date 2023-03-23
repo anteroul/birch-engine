@@ -1,6 +1,7 @@
 # BirchEngine
 3D Engine made in OpenGL for school.
 
+##### Screenshot of an example scene.
 ![example](BirchEngine.png)
 
 ## Installation:
