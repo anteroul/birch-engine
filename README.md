@@ -1,6 +1,8 @@
 # BirchEngine
 3D Engine made in OpenGL for school.
 
+![example](BirchEngine.png)
+
 ## Installation:
 
 Install required dependencies:
